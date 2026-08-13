@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlogSphere — Share Your Ideas. Inspire the World.</title>
+    <meta name="description" content="BlogSphere is a place to write, publish and discover stories from writers everywhere." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- ============================= HEADER ============================= -->
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                BlogSphere
+            </a>
+
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                </ul>
+                <div class="nav-actions" id="navAuthSlot">
+                    <!-- Populated by script.js depending on login state -->
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+            </div>
+
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <!-- ============================= HERO ============================= -->
+        <section class="hero">
+            <div class="container">
+                <div>
+                    <span class="hero-eyebrow">Now in open beta</span>
+                    <h1>Share Your Ideas. <span class="accent">Inspire the World.</span></h1>
+                    <p class="hero-desc">
+                        BlogSphere is a clean, distraction-free space to write, publish and grow an
+                        audience — no ads, no clutter, just your ideas reaching the readers who want them.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="register.html" class="btn btn-primary">Start Writing</a>
+                        <a href="#popular-blogs" class="btn btn-outline">Explore Blogs</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div><strong>12K+</strong><span>Writers</span></div>
+                        <div><strong>48K+</strong><span>Stories Published</span></div>
+                        <div><strong>2.3M</strong><span>Monthly Readers</span></div>
+                    </div>
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="stack-card stack-card--back">
+                        <div class="stack-bar w-40"></div>
+                        <div class="stack-bar w-60"></div>
+                        <div class="stack-bar w-40"></div>
+                    </div>
+                    <div class="stack-card stack-card--mid">
+                        <div class="stack-bar w-60"></div>
+                        <div class="stack-bar w-80"></div>
+                        <div class="stack-bar w-40"></div>
+                    </div>
+                    <div class="stack-card stack-card--front">
+                        <span class="stack-tag">Technology</span>
+                        <div class="stack-bar w-80"></div>
+                        <div class="stack-bar w-60"></div>
+                        <div class="stack-bar w-40"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= FEATURES ============================= -->
+        <section class="features">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">Why BlogSphere</span>
+                        <h2>Everything you need to write and grow</h2>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">✍️</div>
+                        <h3>Write &amp; Publish</h3>
+                        <p>A focused editor with drafts, tags and categories so your ideas go from thought to published post in minutes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">🧭</div>
+                        <h3>Discover Stories</h3>
+                        <p>Explore stories across technology, travel, food and more, curated by category and freshness.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">💬</div>
+                        <h3>Connect with Readers</h3>
+                        <p>Build an audience that follows your voice, not just a single post — every author gets their own space.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" aria-hidden="true">📚</div>
+                        <h3>Share Your Knowledge</h3>
+                        <p>Teach what you know. Well-organized posts help readers find exactly the knowledge they came looking for.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================= POPULAR BLOGS ============================= -->
+        <section class="popular-blogs" id="popular-blogs">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <span class="eyebrow">Fresh from the community</span>
+                        <h2>Popular Blogs</h2>
+                        <p>Hand-picked reads from writers on BlogSphere. Search or filter by category to find your next favorite post.</p>
+                    </div>
+                </div>
+
+                <div class="blog-toolbar">
+                    <div class="search-field">
+                        <span class="icon" aria-hidden="true">🔍</span>
+                        <label for="blogSearchInput" class="visually-hidden">Search blogs</label>
+                        <input type="search" id="blogSearchInput" placeholder="Search blogs by title or topic..." />
+                    </div>
+                </div>
+
+                <div class="filter-chips" id="categoryChips" role="group" aria-label="Filter blogs by category"></div>
+
+                <div class="blog-grid" id="blogGrid" style="margin-top: 1.5rem;">
+                    <!-- Blog cards are rendered by script.js from localStorage -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================= FOOTER ============================= -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand">
+                        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                        BlogSphere
+                    </a>
+                    <p>A clean, distraction-free home for writers to publish, and for readers to discover stories worth their time.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <div class="social-row">
+                        <a href="#" aria-label="BlogSphere on Twitter">Tw</a>
+                        <a href="#" aria-label="BlogSphere on Instagram">Ig</a>
+                        <a href="#" aria-label="BlogSphere on LinkedIn">In</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 BlogSphere. All rights reserved.</span>
+                <span>Built for the Full Stack Web Development Internship — Codomax Digital Solutions.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

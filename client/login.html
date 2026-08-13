@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — BlogSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
 
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                BlogSphere
+            </a>
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                </ul>
+                <div class="nav-actions" id="navAuthSlot">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+            </div>
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content" class="auth-page">
+        <div class="container">
+            <div class="auth-wrap">
+                <div class="auth-side">
+                    <h2>Good to see you again.</h2>
+                    <p>Log in to publish new posts, manage drafts, and keep track of how your writing is doing.</p>
+                    <ul>
+                        <li>📊 Track views across every post you publish</li>
+                        <li>📝 Pick up drafts right where you left off</li>
+                        <li>🔒 Your data stays in this browser — nothing is sent anywhere</li>
+                    </ul>
+                </div>
+
+                <div class="auth-form-wrap">
+                    <h1>Welcome back</h1>
+                    <p class="auth-subtitle">Log in to your BlogSphere account.</p>
+
+                    <div class="alert alert-error" id="loginAlert" role="alert"></div>
+
+                    <form id="loginForm" novalidate>
+                        <div class="form-group">
+                            <label for="loginEmail">Email address</label>
+                            <input type="email" id="loginEmail" class="form-control" placeholder="you@example.com" autocomplete="email" />
+                            <p class="field-error" id="loginEmailError"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="password-field">
+                                <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" autocomplete="current-password" />
+                                <button type="button" class="password-toggle" id="toggleLoginPassword">Show</button>
+                            </div>
+                            <p class="field-error" id="loginPasswordError"></p>
+                        </div>
+
+                        <div class="form-row">
+                            <label class="checkbox-field">
+                                <input type="checkbox" id="loginRemember" />
+                                Remember me
+                            </label>
+                            <a href="#" class="link-accent" id="forgotPasswordLink">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+
+                    <p class="auth-switch">
+                        Don't have an account? <a href="register.html" class="link-accent">Create Account</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Small inline behaviour specific to this page's "Forgot password" link.
+        // Kept minimal on purpose — real password recovery needs a backend.
+        document.getElementById("forgotPasswordLink").addEventListener("click", function (event) {
+            event.preventDefault();
+            alert("Password recovery requires a backend and isn't available in this frontend-only demo.");
+        });
+    </script>
+</body>
+</html>

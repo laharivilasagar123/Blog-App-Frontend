@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — BlogSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                BlogSphere
+            </a>
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                </ul>
+                <div class="nav-actions" id="navAuthSlot">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+            </div>
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content" class="auth-page">
+        <div class="container">
+            <div class="auth-wrap">
+                <div class="auth-side">
+                    <h2>Join the community.</h2>
+                    <p>Create a free account and start publishing your ideas in minutes.</p>
+                    <ul>
+                        <li>✨ A clean editor built for focused writing</li>
+                        <li>🗂️ Organize posts by category and tags</li>
+                        <li>📈 See stats on every post from your dashboard</li>
+                    </ul>
+                </div>
+
+                <div class="auth-form-wrap">
+                    <div id="registerFormWrap">
+                        <h1>Create your account</h1>
+                        <p class="auth-subtitle">It only takes a minute.</p>
+
+                        <div class="alert alert-error" id="registerAlert" role="alert"></div>
+
+                        <form id="registerForm" novalidate>
+                            <div class="form-group">
+                                <label for="registerName">Full name</label>
+                                <input type="text" id="registerName" class="form-control" placeholder="Jane Doe" autocomplete="name" />
+                                <p class="field-error" id="registerNameError"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerEmail">Email address</label>
+                                <input type="email" id="registerEmail" class="form-control" placeholder="you@example.com" autocomplete="email" />
+                                <p class="field-error" id="registerEmailError"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" id="registerPassword" class="form-control" placeholder="At least 6 characters" autocomplete="new-password" />
+                                <p class="field-hint">Use at least 6 characters.</p>
+                                <p class="field-error" id="registerPasswordError"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="registerConfirm">Confirm password</label>
+                                <input type="password" id="registerConfirm" class="form-control" placeholder="Re-enter your password" autocomplete="new-password" />
+                                <p class="field-error" id="registerConfirmError"></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-field">
+                                    <input type="checkbox" id="registerTerms" />
+                                    I agree to the Terms &amp; Conditions
+                                </label>
+                                <p class="field-error" id="registerTermsError">Please accept the Terms &amp; Conditions to continue.</p>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                        </form>
+
+                        <p class="auth-switch">
+                            Already have an account? <a href="login.html" class="link-accent">Login</a>
+                        </p>
+                    </div>
+
+                    <div class="alert alert-success" id="registerSuccess" style="flex-direction: column; align-items: flex-start;">
+                        <div>
+                            <strong>Account created successfully! 🎉</strong>
+                            <p style="margin-top: 0.5rem;">Your BlogSphere account is ready. You can now log in and start writing.</p>
+                        </div>
+                        <a href="login.html" class="btn btn-primary" style="margin-top: 1rem;">Go to Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

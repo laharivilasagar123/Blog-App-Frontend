@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — BlogSphere</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                BlogSphere
+            </a>
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                </ul>
+                <div class="nav-actions" id="navAuthSlot">
+                    <a href="dashboard.html" class="btn btn-outline btn-sm">Dashboard</a>
+                </div>
+            </div>
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div class="dashboard-shell" id="dashboardShell">
+            <!-- ============================= SIDEBAR ============================= -->
+            <aside class="dashboard-sidebar">
+                <nav class="side-nav" aria-label="Dashboard navigation">
+                    <a href="dashboard.html" class="active"><span class="nav-icon" aria-hidden="true">🏠</span> Dashboard</a>
+                    <a href="dashboard.html#my-blogs"><span class="nav-icon" aria-hidden="true">📄</span> My Blogs</a>
+                    <a href="create-blog.html"><span class="nav-icon" aria-hidden="true">➕</span> Create Blog</a>
+                    <a href="#" id="sidebarProfileLink"><span class="nav-icon" aria-hidden="true">👤</span> Profile</a>
+                    <a href="#" id="sidebarLogout"><span class="nav-icon" aria-hidden="true">🚪</span> Logout</a>
+                </nav>
+
+                <div class="sidebar-user">
+                    <span class="author-avatar" id="sidebarAvatar" aria-hidden="true">--</span>
+                    <div>
+                        <strong class="user-name-slot">User</strong>
+                        <span id="sidebarEmail">—</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ============================= MAIN ============================= -->
+            <section class="dashboard-main">
+                <div class="dashboard-topbar">
+                    <div>
+                        <h1>Welcome back, <span class="user-name-slot">Writer</span>!</h1>
+                        <p>Here's what's happening with your blogs today.</p>
+                    </div>
+                    <a href="create-blog.html" class="btn btn-primary">Create Blog</a>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card accent">
+                        <span>Total Blogs</span>
+                        <strong id="statTotalBlogs">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Published Blogs</span>
+                        <strong id="statPublished">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Drafts</span>
+                        <strong id="statDrafts">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Total Views</span>
+                        <strong id="statViews">0</strong>
+                    </div>
+                </div>
+
+                <div id="my-blogs">
+                    <div class="dash-section-head">
+                        <h2>My Blogs</h2>
+                    </div>
+
+                    <div class="blog-table-wrap" id="myBlogsTableWrap">
+                        <table class="blog-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myBlogsTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="empty-state" id="dashboardEmptyState" style="display: none;">
+                        <div class="empty-icon">📝</div>
+                        <h3>You haven't created any blogs yet.</h3>
+                        <p>Once you publish or save a draft, it will show up here.</p>
+                        <a href="create-blog.html" class="btn btn-primary">Create Your First Blog</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+    <script>
+        // "Profile" isn't a separate page in this Module 1 scope — keep it graceful.
+        document.getElementById("sidebarProfileLink").addEventListener("click", function (event) {
+            event.preventDefault();
+            alert("Profile editing will be added in a future module.");
+        });
+    </script>
+</body>
+</html>
