@@ -496,7 +496,7 @@ function initHomeBlogSection() {
                         </span>
                         <span>${formatDate(blog.createdAt)}</span>
                     </div>
-                    <a href="#" class="read-more" data-blog-id="${blog.id}">Read More &rarr;</a>
+                    <a href="blog-details.html?id=${encodeURIComponent(blog.id)}" class="read-more">Read More &rarr;</a>
                 </div>
             </article>
         `;
@@ -545,14 +545,6 @@ function initHomeBlogSection() {
         }
 
         grid.innerHTML = filtered.map(renderBlogCard).join("");
-
-        qsa("[data-blog-id]", grid).forEach((link) => {
-            link.addEventListener("click", (event) => {
-                event.preventDefault();
-                const blog = allBlogs.find((b) => String(b.id) === link.dataset.blogId);
-                if (blog) openBlogPreview(blog);
-            });
-        });
     }
 
     if (searchInput) {
@@ -621,6 +613,75 @@ function openBlogPreview(blog) {
         </div>
     `;
     overlay.classList.add("show");
+}
+
+/* -------------------------------------------------------------------------
+   8b. Blog Details page — full view of a single published blog
+   ------------------------------------------------------------------------- */
+function initBlogDetailsPage() {
+    const shell = qs("#blogDetailsShell");
+    if (!shell) return;
+
+    const statusBox = qs("#blogDetailsStatus");
+    const card = qs("#blogDetailsCard");
+
+    function getInitials(name = "") {
+        return name
+            .split(" ")
+            .map((part) => part[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase();
+    }
+
+    function showStatus(icon, title, message) {
+        statusBox.innerHTML = `
+            <div class="empty-icon">${icon}</div>
+            <h3>${escapeHtml(title)}</h3>
+            <p>${escapeHtml(message)}</p>
+            <a href="index.html#popular-blogs" class="btn btn-primary">Back to Home</a>
+        `;
+        statusBox.style.display = "block";
+        card.style.display = "none";
+    }
+
+    function renderBlog(blog) {
+        document.title = `${blog.title} — BlogSphere`;
+
+        qs("#blogDetailsMedia").textContent = blog.category;
+        qs("#blogDetailsCategory").textContent = blog.category;
+        qs("#blogDetailsTitle").textContent = blog.title;
+        qs("#blogDetailsAvatar").textContent = getInitials(blog.author);
+        qs("#blogDetailsAuthor").textContent = blog.author;
+        qs("#blogDetailsDate").textContent = formatDate(blog.createdAt);
+        qs("#blogDetailsDescription").textContent = blog.description;
+        qs("#blogDetailsContent").textContent = blog.content;
+        qs("#blogDetailsTags").innerHTML = (blog.tags || [])
+            .map((t) => `<span>#${escapeHtml(t)}</span>`)
+            .join("");
+
+        statusBox.style.display = "none";
+        card.style.display = "block";
+    }
+
+    async function loadBlog() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+
+        if (!id) {
+            showStatus("⚠️", "No blog specified", "This link is missing a blog id.");
+            return;
+        }
+
+        try {
+            const data = await apiRequest(`/blogs/${encodeURIComponent(id)}`);
+            renderBlog(data.blog);
+        } catch (err) {
+            showStatus("🔍", "Blog not found", err.message || "This blog post may have been removed.");
+        }
+    }
+
+    loadBlog();
 }
 
 /* -------------------------------------------------------------------------
@@ -953,6 +1014,7 @@ document.addEventListener("DOMContentLoaded", () => {
     consumeFlashMessage();
 
     initHomeBlogSection();
+    initBlogDetailsPage();
     initLoginPage();
     initRegisterPage();
     initDashboardPage();

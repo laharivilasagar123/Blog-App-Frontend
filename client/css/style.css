@@ -1557,6 +1557,26 @@ textarea.form-control {
 }
 
 /* -------------------------------------------------------------------------
+   14b. Blog Details page
+   ------------------------------------------------------------------------- */
+.details-back-link {
+    margin-bottom: var(--space-2);
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.details-back-link:hover {
+    text-decoration: underline;
+    background: transparent;
+}
+
+#blogDetailsCard .preview-media {
+    height: 220px;
+}
+
+/* -------------------------------------------------------------------------
    15. Responsive
    ------------------------------------------------------------------------- */
 @media (max-width: 1024px) {

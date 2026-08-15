@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Post — BlogSphere</title>
+    <meta name="description" content="Read the full story on BlogSphere." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container navbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                BlogSphere
+            </a>
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                </ul>
+                <div class="nav-actions" id="navAuthSlot">
+                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+                    <a href="register.html" class="btn btn-primary btn-sm">Register</a>
+                </div>
+            </div>
+            <button type="button" class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="main-content" class="page-shell">
+        <div class="container">
+            <div class="create-blog-shell" id="blogDetailsShell">
+                <a href="index.html#popular-blogs" class="btn btn-ghost details-back-link" style="align-self: flex-start;">&larr; Back to all blogs</a>
+
+                <!-- Loading / error state -->
+                <div class="empty-state" id="blogDetailsStatus">
+                    <div class="empty-icon">📖</div>
+                    <p>Loading blog post...</p>
+                </div>
+
+                <!-- Populated by script.js once GET /api/blogs/:id resolves -->
+                <article class="form-card" id="blogDetailsCard" style="display: none;">
+                    <div class="preview-media" id="blogDetailsMedia" aria-hidden="true"></div>
+                    <span class="blog-category" id="blogDetailsCategory"></span>
+                    <h1 id="blogDetailsTitle" style="margin-top: 0.75rem; font-size: 1.9rem;"></h1>
+
+                    <div class="blog-meta" id="blogDetailsMeta" style="margin-top: 1rem;">
+                        <span class="blog-author">
+                            <span class="author-avatar" id="blogDetailsAvatar" aria-hidden="true">--</span>
+                            <span id="blogDetailsAuthor"></span>
+                        </span>
+                        <span id="blogDetailsDate"></span>
+                    </div>
+
+                    <p id="blogDetailsDescription" style="color: var(--text-muted); font-size: 1.05rem; margin: 1.25rem 0;"></p>
+
+                    <div id="blogDetailsContent" class="preview-content"></div>
+
+                    <div class="preview-tags" id="blogDetailsTags"></div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="brand">
+                        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                        BlogSphere
+                    </a>
+                    <p>A clean, distraction-free home for writers to publish, and for readers to discover stories worth their time.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#popular-blogs">Explore Blogs</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Follow Us</h4>
+                    <div class="social-row">
+                        <a href="#" aria-label="BlogSphere on Twitter">Tw</a>
+                        <a href="#" aria-label="BlogSphere on Instagram">Ig</a>
+                        <a href="#" aria-label="BlogSphere on LinkedIn">In</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 BlogSphere. All rights reserved.</span>
+                <span>Built for the Full Stack Web Development Internship — Codomax Digital Solutions.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
