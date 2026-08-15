@@ -1,52 +1,58 @@
 /**
- * userModel.js
+ * userModel.js (Module 3: MongoDB-backed)
  *
- * Simple "model" for users, backed by server/data/users.json instead of a
- * real database. Every function returns/accepts plain JavaScript objects.
+ * Same function names as the Module 2 JSON-file version (see
+ * server/models/legacy-json/userModel.js) so authController.js barely had
+ * to change — only the storage underneath is different now. Every
+ * function is async because talking to MongoDB is asynchronous.
  */
 
-const path = require("path");
-const { readJson, writeJson } = require("../utils/jsonStore");
+const mongoose = require("mongoose");
+const User = require("./schemas/User");
 
-const USERS_FILE = path.join(__dirname, "..", "data", "users.json");
-
-function getAllUsers() {
-    return readJson(USERS_FILE, []);
+// Converts a Mongoose document (or a plain lean() object) into a plain
+// object with a string "id" field, matching what the frontend expects.
+function toPlainUser(doc) {
+    if (!doc) return null;
+    const obj = doc.toObject ? doc.toObject() : doc;
+    return {
+        id: obj._id.toString(),
+        name: obj.name,
+        email: obj.email,
+        password: obj.password, // stripped out by toPublicUser() before ever leaving the server
+        createdAt: obj.createdAt,
+    };
 }
 
-function saveAllUsers(users) {
-    return writeJson(USERS_FILE, users);
+async function getAllUsers() {
+    const users = await User.find().lean();
+    return users.map(toPlainUser);
 }
 
-function findUserByEmail(email) {
-    const users = getAllUsers();
-    return users.find((u) => u.email.toLowerCase() === String(email).toLowerCase());
+async function findUserByEmail(email) {
+    if (!email) return null;
+    const user = await User.findOne({ email: email.toLowerCase().trim() }).lean();
+    return toPlainUser(user);
 }
 
-function findUserById(id) {
-    const users = getAllUsers();
-    return users.find((u) => u.id === id);
+async function findUserById(id) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) return null;
+    const user = await User.findById(id).lean();
+    return toPlainUser(user);
 }
 
 /**
- * Creates a new user record and appends it to users.json.
+ * Creates a new user record in MongoDB.
  * `passwordHash` must already be a bcrypt hash — this model never hashes
  * or verifies passwords itself, that's the controller's job.
  */
 async function createUser({ name, email, passwordHash }) {
-    const users = getAllUsers();
-
-    const newUser = {
-        id: users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1,
+    const user = await User.create({
         name,
-        email,
+        email: email.toLowerCase().trim(),
         password: passwordHash,
-        createdAt: new Date().toISOString(),
-    };
-
-    users.push(newUser);
-    await saveAllUsers(users);
-    return newUser;
+    });
+    return toPlainUser(user);
 }
 
 // Strips the password hash before a user object is ever sent in a response

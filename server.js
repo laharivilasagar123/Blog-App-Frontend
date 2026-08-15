@@ -1,11 +1,11 @@
 /**
  * server.js
  *
- * BlogSphere API — Module 2 (Backend Development)
+ * BlogSphere API — Module 3 (Database Integration)
  * Codomax Digital Solutions — Full Stack Web Development Internship
  *
  * A small Express server exposing REST APIs for registration, login, and
- * blog CRUD, backed by JSON files instead of a real database.
+ * blog CRUD, backed by MongoDB (see config/db.js and models/schemas/).
  */
 
 require("dotenv").config();
@@ -13,6 +13,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
+const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 
@@ -60,7 +61,8 @@ app.use((req, res) => {
 
 /* ---------------------------------------------------------------------
    Centralized error handler
-   Catches: invalid JSON bodies, and anything next(err) is called with.
+   Catches: invalid JSON bodies, Mongoose validation/cast errors, and
+   anything next(err) is called with.
    Must be defined last, and must take exactly 4 arguments for Express to
    recognize it as an error handler.
    --------------------------------------------------------------------- */
@@ -72,6 +74,22 @@ app.use((err, req, res, next) => {
         });
     }
 
+    // Mongoose schema validation failed (e.g. a required field was missing)
+    if (err.name === "ValidationError") {
+        const firstMessage = Object.values(err.errors)[0]?.message || "Invalid data.";
+        return res.status(400).json({ success: false, message: firstMessage });
+    }
+
+    // Mongoose couldn't cast a value to the expected type (e.g. a malformed ObjectId)
+    if (err.name === "CastError") {
+        return res.status(400).json({ success: false, message: "Invalid id format." });
+    }
+
+    // MongoDB duplicate-key error (e.g. the unique email index)
+    if (err.code === 11000) {
+        return res.status(400).json({ success: false, message: "That value is already in use." });
+    }
+
     console.error("Unhandled server error:", err);
     return res.status(500).json({
         success: false,
@@ -79,6 +97,14 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`BlogSphere API is running on http://localhost:${PORT}`);
-});
+/* ---------------------------------------------------------------------
+   Start: connect to MongoDB first, then start accepting requests.
+   --------------------------------------------------------------------- */
+async function startServer() {
+    await connectDB();
+    app.listen(PORT, () => {
+        console.log(`BlogSphere API is running on http://localhost:${PORT}`);
+    });
+}
+
+startServer();

@@ -1,17 +1,26 @@
 /**
- * blogController.js
+ * blogController.js (Module 3: MongoDB-backed)
  *
  * Handles creating, reading, updating and deleting blog posts.
  * The author of a blog is always taken from the authenticated JWT user
  * (req.user), never from anything the client sends in the request body.
+ *
+ * Blog ids are now MongoDB ObjectId strings (e.g. "64f1a2b3c4d5e6f7a8b9c0d1")
+ * instead of the small integers used in the Module 2 JSON-file version, so
+ * route params are used as-is instead of being run through Number().
  */
 
 const blogModel = require("../models/blogModel");
 const userModel = require("../models/userModel");
 
-function attachAuthorName(blog) {
-    const author = userModel.findUserById(blog.authorId);
+async function attachAuthorName(blog) {
+    if (!blog) return blog;
+    const author = await userModel.findUserById(blog.authorId);
     return { ...blog, author: author ? author.name : "Unknown Author" };
+}
+
+async function attachAuthorNames(blogs) {
+    return Promise.all(blogs.map(attachAuthorName));
 }
 
 async function createBlog(req, res) {
@@ -45,7 +54,7 @@ async function createBlog(req, res) {
         return res.status(201).json({
             success: true,
             message: "Blog created successfully",
-            blog: attachAuthorName(newBlog),
+            blog: await attachAuthorName(newBlog),
         });
     } catch (err) {
         console.error("createBlog error:", err);
@@ -55,11 +64,8 @@ async function createBlog(req, res) {
 
 async function getBlogs(req, res) {
     try {
-        const blogs = blogModel.getPublishedBlogs()
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .map(attachAuthorName);
-
-        return res.status(200).json({ success: true, blogs });
+        const blogs = await blogModel.getPublishedBlogs();
+        return res.status(200).json({ success: true, blogs: await attachAuthorNames(blogs) });
     } catch (err) {
         console.error("getBlogs error:", err);
         return res.status(500).json({ success: false, message: "Something went wrong while fetching blogs." });
@@ -68,14 +74,14 @@ async function getBlogs(req, res) {
 
 async function getBlogById(req, res) {
     try {
-        const id = Number(req.params.id);
-        const blog = blogModel.getBlogById(id);
+        const { id } = req.params;
+        const blog = await blogModel.getBlogById(id);
 
         if (!blog) {
             return res.status(404).json({ success: false, message: "Blog not found." });
         }
 
-        return res.status(200).json({ success: true, blog: attachAuthorName(blog) });
+        return res.status(200).json({ success: true, blog: await attachAuthorName(blog) });
     } catch (err) {
         console.error("getBlogById error:", err);
         return res.status(500).json({ success: false, message: "Something went wrong while fetching the blog." });
@@ -84,12 +90,8 @@ async function getBlogById(req, res) {
 
 async function getMyBlogs(req, res) {
     try {
-        const blogs = blogModel
-            .getBlogsByAuthorId(req.user.id)
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .map(attachAuthorName);
-
-        return res.status(200).json({ success: true, blogs });
+        const blogs = await blogModel.getBlogsByAuthorId(req.user.id);
+        return res.status(200).json({ success: true, blogs: await attachAuthorNames(blogs) });
     } catch (err) {
         console.error("getMyBlogs error:", err);
         return res.status(500).json({ success: false, message: "Something went wrong while fetching your blogs." });
@@ -98,8 +100,8 @@ async function getMyBlogs(req, res) {
 
 async function updateBlog(req, res) {
     try {
-        const id = Number(req.params.id);
-        const existingBlog = blogModel.getBlogById(id);
+        const { id } = req.params;
+        const existingBlog = await blogModel.getBlogById(id);
 
         if (!existingBlog) {
             return res.status(404).json({ success: false, message: "Blog not found." });
@@ -135,7 +137,7 @@ async function updateBlog(req, res) {
         return res.status(200).json({
             success: true,
             message: "Blog updated successfully",
-            blog: attachAuthorName(updatedBlog),
+            blog: await attachAuthorName(updatedBlog),
         });
     } catch (err) {
         console.error("updateBlog error:", err);
@@ -145,8 +147,8 @@ async function updateBlog(req, res) {
 
 async function deleteBlog(req, res) {
     try {
-        const id = Number(req.params.id);
-        const existingBlog = blogModel.getBlogById(id);
+        const { id } = req.params;
+        const existingBlog = await blogModel.getBlogById(id);
 
         if (!existingBlog) {
             return res.status(404).json({ success: false, message: "Blog not found." });

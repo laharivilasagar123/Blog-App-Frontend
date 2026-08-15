@@ -1,43 +1,62 @@
 /**
- * blogModel.js
+ * blogModel.js (Module 3: MongoDB-backed)
  *
- * Simple "model" for blog posts, backed by server/data/blogs.json instead
- * of a real database.
+ * Same function names as the Module 2 JSON-file version (see
+ * server/models/legacy-json/blogModel.js) so blogController.js barely had
+ * to change — only the storage underneath is different now. Every
+ * function is async because talking to MongoDB is asynchronous.
  */
 
-const path = require("path");
-const { readJson, writeJson } = require("../utils/jsonStore");
+const mongoose = require("mongoose");
+const Blog = require("./schemas/Blog");
 
-const BLOGS_FILE = path.join(__dirname, "..", "data", "blogs.json");
-
-function getAllBlogs() {
-    return readJson(BLOGS_FILE, []);
+// Converts a Mongoose document (or a plain lean() object) into a plain
+// object with a string "id" field, matching what the frontend expects.
+function toPlainBlog(doc) {
+    if (!doc) return null;
+    const obj = doc.toObject ? doc.toObject() : doc;
+    return {
+        id: obj._id.toString(),
+        title: obj.title,
+        category: obj.category,
+        description: obj.description,
+        content: obj.content,
+        tags: obj.tags || [],
+        image: obj.image || "",
+        authorId: obj.authorId,
+        status: obj.status,
+        createdAt: obj.createdAt,
+        updatedAt: obj.updatedAt,
+    };
 }
 
-function saveAllBlogs(blogs) {
-    return writeJson(BLOGS_FILE, blogs);
+function isValidId(id) {
+    return Boolean(id) && mongoose.Types.ObjectId.isValid(id);
 }
 
-function getBlogById(id) {
-    const blogs = getAllBlogs();
-    return blogs.find((b) => b.id === id);
+async function getAllBlogs() {
+    const blogs = await Blog.find().sort({ createdAt: -1 }).lean();
+    return blogs.map(toPlainBlog);
 }
 
-function getBlogsByAuthorId(authorId) {
-    const blogs = getAllBlogs();
-    return blogs.filter((b) => b.authorId === authorId);
+async function getBlogById(id) {
+    if (!isValidId(id)) return null;
+    const blog = await Blog.findById(id).lean();
+    return toPlainBlog(blog);
 }
 
-function getPublishedBlogs() {
-    const blogs = getAllBlogs();
-    return blogs.filter((b) => b.status === "published");
+async function getBlogsByAuthorId(authorId) {
+    const blogs = await Blog.find({ authorId }).sort({ createdAt: -1 }).lean();
+    return blogs.map(toPlainBlog);
+}
+
+async function getPublishedBlogs() {
+    const blogs = await Blog.find({ status: "published" }).sort({ createdAt: -1 }).lean();
+    return blogs.map(toPlainBlog);
 }
 
 async function createBlog({ title, category, description, content, tags, authorId, status, image }) {
-    const blogs = getAllBlogs();
-
-    const newBlog = {
-        id: blogs.length > 0 ? Math.max(...blogs.map((b) => b.id)) + 1 : 1,
+    const blog = await Blog.create({
         title,
         category,
         description,
@@ -46,40 +65,27 @@ async function createBlog({ title, category, description, content, tags, authorI
         image: image || "",
         authorId,
         status: status === "draft" ? "draft" : "published",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    };
-
-    blogs.unshift(newBlog);
-    await saveAllBlogs(blogs);
-    return newBlog;
+    });
+    return toPlainBlog(blog);
 }
 
 async function updateBlog(id, updates) {
-    const blogs = getAllBlogs();
-    const index = blogs.findIndex((b) => b.id === id);
-    if (index === -1) return null;
+    if (!isValidId(id)) return null;
 
-    blogs[index] = {
-        ...blogs[index],
-        ...updates,
-        id: blogs[index].id, // id and authorId can never be overwritten by an update
-        authorId: blogs[index].authorId,
-        updatedAt: new Date().toISOString(),
-    };
+    // authorId can never be changed through an update, no matter what's passed in
+    const safeUpdates = { ...updates };
+    delete safeUpdates.authorId;
+    delete safeUpdates.id;
+    delete safeUpdates._id;
 
-    await saveAllBlogs(blogs);
-    return blogs[index];
+    const blog = await Blog.findByIdAndUpdate(id, safeUpdates, { new: true, runValidators: true }).lean();
+    return toPlainBlog(blog);
 }
 
 async function deleteBlog(id) {
-    const blogs = getAllBlogs();
-    const index = blogs.findIndex((b) => b.id === id);
-    if (index === -1) return false;
-
-    blogs.splice(index, 1);
-    await saveAllBlogs(blogs);
-    return true;
+    if (!isValidId(id)) return false;
+    const result = await Blog.findByIdAndDelete(id);
+    return Boolean(result);
 }
 
 module.exports = {
@@ -90,4 +96,5 @@ module.exports = {
     createBlog,
     updateBlog,
     deleteBlog,
+    isValidId,
 };

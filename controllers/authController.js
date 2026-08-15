@@ -40,7 +40,7 @@ async function registerUser(req, res) {
             return res.status(400).json({ success: false, message: "Password must be at least 6 characters." });
         }
 
-        const existingUser = userModel.findUserByEmail(email.trim());
+        const existingUser = await userModel.findUserByEmail(email.trim());
         if (existingUser) {
             return res.status(400).json({ success: false, message: "Email already registered" });
         }
@@ -57,6 +57,11 @@ async function registerUser(req, res) {
             message: "User registered successfully",
         });
     } catch (err) {
+        // MongoDB's own unique index on email is a second line of defense in
+        // case two registrations for the same email land at almost the same time.
+        if (err.code === 11000) {
+            return res.status(400).json({ success: false, message: "Email already registered" });
+        }
         console.error("registerUser error:", err);
         return res.status(500).json({ success: false, message: "Something went wrong while registering. Please try again." });
     }
@@ -70,7 +75,7 @@ async function loginUser(req, res) {
             return res.status(400).json({ success: false, message: "Email and password are required." });
         }
 
-        const user = userModel.findUserByEmail(email.trim());
+        const user = await userModel.findUserByEmail(email.trim());
         if (!user) {
             return res.status(401).json({ success: false, message: "Invalid email or password" });
         }
